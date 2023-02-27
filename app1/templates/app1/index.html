@@ -1,0 +1,57 @@
+{% extends 'app1/base.html' %}
+{% load static %}
+{% block header %}ホーム{% endblock header %}
+{% block css %}
+<!--Local CSS-->
+{% endblock css %}
+{% block title %} AI-Share {% endblock title %}
+{% block content %}
+<div class="container">
+    {% if user.id %}
+    <div class="row">
+        {% for item in items %}
+        {% if item.category == 0 %}
+        <div class="col-md-4 mb-3">
+            <a class="card border-0" href="{% url 'detail' item.id %}" id="lend">
+                <div class="card-body">
+                    <h5 class="card-title">{{ item.item_name }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">貸出</h6>
+                    <p class="card-text">{{ item.user.room_number }} {{ item.user.user_name }}</p>
+                    <div class="date"><small>{{ item.posted_at }}</small></div>
+                </div>
+            </a>
+        </div>
+        {% elif item.category == 1 %}
+        <div class="col-md-4 mb-3">
+            <a class="card border-0" href="{% url 'detail' item.id %}" id="giving">
+                <div class="card-body">
+                    <h5 class="card-title">{{ item.item_name }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">譲渡</h6>
+                    <p class="card-text">{{ item.user.room_number }} {{ item.user.user_name }}</p>
+                    <div class="date"><small>{{ item.posted_at }}</small></div>
+                </div>
+            </a>
+        </div>
+        {% else %}
+        <div class="col-md-4 mb-3">
+            <a class="card border-0" href="{% url 'detail' item.id %}" id="request">
+                <div class="card-body">
+                    <h5 class="card-title">{{ item.item_name }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">リクエスト</h6>
+                    <p class="card-text">{{ item.user.room_number }} {{ item.user.user_name }}</p>
+                    <div class="date"><small>{{ item.posted_at }}</small></div>
+                </div>
+            </a>
+        </div>
+        {% endif %}
+        {% empty %}
+        <h3>投稿はありません</h3>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="message">
+        <h2><a class="nav-link" href="{% url 'social:begin' 'google-oauth2' %}" style="color: #0077b6;">ログイン</a></h2>
+    </div>
+    {% endif %}
+</div>
+{% endblock content %}

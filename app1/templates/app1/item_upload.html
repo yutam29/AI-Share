@@ -1,0 +1,46 @@
+{% extends 'app1/base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% block header %}投稿{% endblock header %}
+{% block css %}
+<!--Local CSS-->
+{% endblock css %}
+{% block title %} AI-Share {% endblock title %}
+{% block content %}
+<div class="container">
+    {% if user.id %}
+    <div class="form">
+        <form enctype="multipart/form-data" method="POST" action="">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="item_name">名前</label>
+                {% render_field form.item_name class="form-control" placeholder="アイテム名" %}
+            </div>
+            <div class="mb-3">
+                <label for="category">形式</label>
+                <select class="form-select" name="category">
+                    <option selected>種類の選択</option>
+                    <option value=0>貸出</option>
+                    <option value=1>譲渡</option>
+                    <option value=2>リクエスト</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="description">詳細</label>
+                {% render_field form.description class="form-control" %}
+            </div>
+            <div class="mb-3">
+                <label for="image">画像</label><br>
+                {% render_field form.image class="form-control" %}
+            </div>
+            <input type="hidden" name="user" value='{{ user.id }}'>
+            <input class="btn btn-primary btn-sm" type="submit" value="送信">
+        </form>
+    </div>
+    {% else %}
+    <div class="message">
+        <h2>ログインしてね</h2>
+    </div>
+    {% endif %}
+</div>
+{% endblock content %}

@@ -1,0 +1,76 @@
+{% extends 'app1/base.html' %}
+{% load static %}
+{% block header %}
+{% if item.category == 0 %}
+貸出
+{% elif item.category == 1 %}
+譲渡
+{% else %}
+リクエスト
+{% endif %}
+{% endblock header %}
+
+{% block css %}
+<!--Local CSS-->
+{% endblock css %}
+{% block title %} {{ item.item_name }} {% endblock title %}
+{% block content %}
+<div class="container">
+    {% if item.category == 0 %}
+    <div class="detail mb-3" style="background-color: #99D98C;">
+        <!--イメージ-->
+        <h3 class="ps-2 pt-2">{{ item.item_name }}</h3>
+        <h5 class="ps-2">{{ item.user.room_number }} {{ item.user.user_name }}</h5>
+        <p class="ps-2">{{ item.description }} <small>{{ item.posted_at }}</small></p>
+    <div class="apply pb-2 ps-2"><button class="btn btn-success btn-sm" type="submit">貸してもらう</button></div>
+    </div>
+    {% elif item.category == 1 %}
+    <div class="detail mb-3" style="background-color: #BDE0FE">
+        <!--イメージ-->
+        <h3 class="ps-2 pt-2">{{ item.item_name }}</h3>
+        <h5 class="ps-2">{{ item.user.room_number }} {{ item.user.user_name }}</h5>
+        <p class="ps-2">{{ item.description }} <small>{{ item.posted_at }}</small></p>
+    <div class="apply pb-2 ps-2"><button class="btn btn-primary btn-sm" type="submit">もらう</button></div>
+    </div>
+    {% else %}
+    <div class="detail mb-3" style="background-color: #FF4D6D">
+        <!--イメージ-->
+        <h3 class="ps-2 pt-2">{{ item.item_name }}</h3>
+        <h5 class="ps-2">{{ item.user.room_number }} {{ item.user.user_name }}</h5>
+        <p class="ps-2">{{ item.description }} <small>{{ item.posted_at }}</small></p>
+    <div class="apply pb-2 ps-2"><button class="btn btn-danger btn-sm" type="submit">貸してあげる</button></div>
+    </div>
+    {% endif %}
+    
+    <div class="comment">
+        <div class="row g-1">
+            <div class="col-auto">
+                <h4>コメント</h4>
+            </div>
+            <div class="col-auto">
+                <form enctype="multipart/form-data" method="POST" action="">
+                    {% csrf_token %}
+                    <div class="form_element">
+                        {{form.detail}}
+                    </div>
+                    <input type="hidden" name="user" value='{{ user.id }}'>
+                    <input type="hidden" name="item" value='{{ item.id }}'>
+                    <input class="btn btn-primary btn-sm" type="submit" value="送信">
+                </form>
+            </div>
+        </div>
+    </div>
+    <hr>
+    {% for comment in comments %}
+    <div class="comment_list">
+        <h6>{{ comment.user.room_number }} {{ comment.user.user_name }}</h6>
+        <p>{{ comment.detail }}</p>
+        <small>{{ comment.cmt_posted_at }}</small>
+        <hr>
+    </div>
+    {% empty %}
+    <h4>コメントはありません</h4>
+    {% endfor %}
+</div>
+</div>
+{% endblock content %}
