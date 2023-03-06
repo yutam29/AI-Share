@@ -17,12 +17,15 @@
     <header>
         <div class="navbar navbar-expand-lg navbar-light fixed-top bg-light">
             <div class="container-fluid">
+                <h2 class="text-center me-4">
+                    {% block header %}{% endblock header %}
+                </h2>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="collapse navbar-collapse justify-content-center" id="navbarSupportedContent">
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     {% if user.id %}
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
@@ -40,25 +43,18 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'chat' %}">メッセージ</a>
                         </li>
-                        <!--<li class="nav-item">
-                        <a class="nav-link" href="#">施設予約</a>
-                    </li>-->
                     </ul>
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <ul class="navbar-nav mb-2 me-2 mb-lg-0">
                         <li class="nav-item">
-                            <h2 class="text-center">
-                                {% block header %}{% endblock header %}
-                            </h2>
+                            <a class="nav-link" href="{% url 'user_profile' %}">{{ user.room_number }} {{ user.user_name }}</a>
                         </li>
                     </ul>
                     <ul class="navbar-nav mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link" href="#">{{ user.room_number }} {{ user.user_name }}</a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link" href="{% url 'logout' %}">ログアウト</a>
                         </li>
                     </ul>
+                </div>
                     {% else %}
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
@@ -76,10 +72,6 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'social:begin' 'google-oauth2' %}">メッセージ</a>
                         </li>
-                        <!--
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">施設予約</a>
-                    </li>-->
                     </ul>
                     <ul class="navbar-nav mb-2 mb-lg-0">
                         <li class="nav-item">
@@ -87,7 +79,6 @@
                         </li>
                     </ul>
                     {% endif %}
-                </div>
             </div>
         </div>
     </header>

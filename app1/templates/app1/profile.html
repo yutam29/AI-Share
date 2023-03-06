@@ -1,0 +1,53 @@
+{% extends 'app1/base.html' %}
+{% load static %}
+{% block header %} {{ user.user_name }}さんのページ {% endblock header %}
+{% block css %}
+<!--Local CSS-->
+{% endblock css %}
+{% block title %} {{ user.user_name}}さんのページ {% endblock title %}
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex flex-column mb-3">
+        {% for item in items %}
+        {% if item.category == 0 %}
+        <div class="p-1">
+            <a class="card border-0" href="{% url 'detail' item.id %}" id="lend">
+                <div class="card-body">
+                    <h5 class="card-title">{{ item.item_name }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">貸出</h6>
+                    <p class="card-text">{{ item.user.room_number }} {{ item.user.user_name }}</p>
+                    <div class="date"><small>{{ item.posted_at }}</small></div>
+                </div>
+            </a>
+        </div>
+        {% elif item.category == 1 %}
+        <div class="p-1">
+            <a class="card border-0" href="{% url 'detail' item.id %}" id="giving">
+                <div class="card-body">
+                    <h5 class="card-title">{{ item.item_name }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">譲渡</h6>
+                    <p class="card-text">{{ item.user.room_number }} {{ item.user.user_name }}</p>
+                    <div class="date"><small>{{ item.posted_at }}</small></div>
+                </div>
+            </a>
+        </div>
+        {% else %}
+        <div class="p-1">
+            <a class="card border-0" href="{% url 'detail' item.id %}" id="request">
+                <div class="card-body">
+                    <h5 class="card-title">{{ item.item_name }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">リクエスト</h6>
+                    <p class="card-text">{{ item.user.room_number }} {{ item.user.user_name }}</p>
+                    <div class="date"><small>{{ item.posted_at }}</small></div>
+                </div>
+            </a>
+        </div>
+        {% endif %}
+        {% empty %}
+        <div class="message">
+            <h2 ><a class="nav-link" href="{% url 'item_upload' %}" style="color: #0077b6;">ここから投稿してね</a></h2>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock content %}

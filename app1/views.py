@@ -123,6 +123,15 @@ def item_deleted(request, item_id):
     item.delete()
     return redirect('index')
 
+@login_required
+def profile(request):
+    user = Profile.objects.get(user = request.user)
+    item = Item.objects.filter(user = user).order_by("-posted_at")
+    context = {
+        'user' : user,
+        'items' : item,
+    }
+    return render(request, "app1/profile.html", context)
 
 
 
