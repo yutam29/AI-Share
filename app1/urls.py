@@ -10,4 +10,5 @@ urlpatterns = [
     path('item_upload', views.item_upload, name='item_upload'),
     path('deliver/<int:item_id>', views.deliver_register, name='deliver'),
     path('state/<int:list_id>', views.change_state, name='change_state'),
+    path('item_deleted/<int:item_id>', views.item_deleted, name='item_deleted'),
 ]

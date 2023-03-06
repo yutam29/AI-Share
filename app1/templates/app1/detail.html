@@ -22,8 +22,11 @@
             <h3 class="ps-2 pt-3">{{ item.item_name }}</h3>
             <h5 class="ps-2">{{ item.user.room_number }} {{ item.user.user_name }}</h5>
             <p class="ps-2">{{ item.description }} <small>{{ item.posted_at }}</small></p>
-            <div class="apply pb-3 ps-2"><a class="btn btn-success btn-sm" href="{% url 'deliver' item.id %}"
-                    role="button">貸してもらう</a></div>
+            {% if item.user != user %}
+            <div class="apply pb-3 ps-2"><a class="btn btn-success btn-sm" href="{% url 'deliver' item.id %}" role="button">貸してもらう</a></div>
+            {% else %}
+            <div class="apply pb-3 ps-2"><a class="btn btn-success btn-sm" href="{% url 'item_deleted' item.id %}" role="button">投稿を削除する</a></div>
+            {% endif %}
         </div>
         {% if item.image %}
         <div class="col text-center">
@@ -41,8 +44,11 @@
             <h3 class="ps-2 pt-3">{{ item.item_name }}</h3>
             <h5 class="ps-2">{{ item.user.room_number }} {{ item.user.user_name }}</h5>
             <p class="ps-2">{{ item.description }} <small>{{ item.posted_at }}</small></p>
-            <div class="apply pb-3 ps-2"><a class="btn btn-primary btn-sm" href="{% url 'deliver' item.id %}"
-                    role="button">もらう</a></div>
+            {% if item.user != user %}
+            <div class="apply pb-3 ps-2"><a class="btn btn-primary btn-sm" href="{% url 'deliver' item.id %}" role="button">もらう</a></div>
+            {% else %}
+            <div class="apply pb-3 ps-2"><a class="btn btn-primary btn-sm" href="{% url 'item_deleted' item.id %}" role="button">投稿を削除する</a></div>
+            {% endif %}
         </div>
         {% if item.image %}
         <div class="col text-center">
@@ -60,8 +66,11 @@
             <h3 class="ps-2 pt-3">{{ item.item_name }}</h3>
             <h5 class="ps-2">{{ item.user.room_number }} {{ item.user.user_name }}</h5>
             <p class="ps-2">{{ item.description }} <small>{{ item.posted_at }}</small></p>
-            <div class="apply pb-3 ps-2"><a class="btn btn-danger btn-sm" href="{% url 'deliver' item.id %}"
-                    role="button">貸してあげる</a></div>
+            {% if item.user != user %}
+            <div class="apply pb-3 ps-2"><a class="btn btn-danger btn-sm" href="{% url 'deliver' item.id %}" role="button">貸してあげる</a></div>
+            {% else %}
+            <div class="apply pb-3 ps-2"><a class="btn btn-danger btn-sm" href="{% url 'item_deleted' item.id %}" role="button">投稿を削除する</a></div>
+            {% endif %}
         </div>
         {% if item.image %}
         <div class="col text-center">
@@ -87,8 +96,11 @@
             {% else %}
             <h4>貸してくれる人</h4>
             {% endif %}
+            {% endif %}
 
             {% for lending in lendings %}
+            {% if item.user == user%}
+
             {% if lending.item.category == 0 %}
             {% if lending.state == 0 %}
             <div class="d-flex justify-content-between mb-3" style="background-color: #99D98C;">
@@ -106,6 +118,15 @@
                 </div>
                 <div class="p-2">
                     <a class="btn btn-warning btn-sm" href="{% url 'change_state' lending.id %}" role="button">貸出済</a>
+                </div>
+            </div>
+            {% elif lending.state == 2 %}
+            <div class="d-flex justify-content-between mb-3" style="background-color: #8ECAE6;">
+                <div class="p-2">
+                    <h6>{{ lending.lender.room_number}} {{ lending.lender.user_name }}</h6>
+                </div>
+                <div class="p-2">
+                    <a class="btn btn-info btn-sm" href="{% url 'change_state' lending.id %}" role="button">返却済</a>
                 </div>
             </div>
             {% endif %}
@@ -148,12 +169,115 @@
                     <a class="btn btn-warning btn-sm" href="{% url 'change_state' lending.id %}" role="button">受取済</a>
                 </div>
             </div>
+            {% elif lending.state == 2 %}
+            <div class="d-flex justify-content-between mb-3" style="background-color: #8ECAE6;">
+                <div class="p-2">
+                    <h6>{{ lending.lender.room_number}} {{ lending.lender.user_name }}</h6>
+                </div>
+                <div class="p-2">
+                    <a class="btn btn-info btn-sm" href="{% url 'change_state' lending.id %}" role="button">返却済</a>
+                </div>
+            </div>
             {% endif %}
             {% endif %}
+
+            {% else %}
+            {% if lending.lender == user %}
+            {% if lending.item.category == 0 %}
+            {% if lending.state == 0 %}
+            <div class="d-flex justify-content-between mb-3" style="background-color: #99D98C;">
+                <div class="p-2">
+                    <h6>{{ lending.lender.room_number}} {{ lending.lender.user_name }}</h6>
+                </div>
+                <div class="p-2">
+                    <button class="btn btn-success btn-sm" role="button">貸出待ち</a>
+                </div>
+            </div>
+            {% elif lending.state == 1 %}
+            <div class="d-flex justify-content-between mb-3" style="background-color: #FFD166;">
+                <div class="p-2">
+                    <h6>{{ lending.lender.room_number}} {{ lending.lender.user_name }}</h6>
+                </div>
+                <div class="p-2">
+                    <button class="btn btn-warning btn-sm" role="button">受取待ち</a>
+                </div>
+            </div>
+            {% elif lending.state == 2 %}
+            <div class="d-flex justify-content-between mb-3" style="background-color: #8ECAE6;">
+                <div class="p-2">
+                    <h6>{{ lending.lender.room_number}} {{ lending.lender.user_name }}</h6>
+                </div>
+                <div class="p-2">
+                    <a class="btn btn-info btn-sm" href="{% url 'change_state' lending.id %}" role="button">返却済</a>
+                </div>
+            </div>
+            {% endif %}
+            {% elif lending.item.category == 1 %}
+            {% if lending.state == 0 %}
+            <div class="d-flex justify-content-between mb-3" style="background-color: #BDE0FE;">
+                <div class="p-2">
+                    <h6>{{ lending.lender.room_number}} {{ lending.lender.user_name }}</h6>
+                </div>
+                <div class="p-2">
+                    <button class="btn btn-primary btn-sm">譲渡待ち</a>
+                </div>
+            </div>
+            {% elif lending.state == 1 %}
+            <div class="d-flex justify-content-between mb-3" style="background-color: #FFD166;">
+                <div class="p-2">
+                    <h6>{{ lending.lender.room_number}} {{ lending.lender.user_name }}</h6>
+                </div>
+                <div class="p-2">
+                    <a class="btn btn-warning btn-sm" href="{% url 'change_state' lending.id %}" role="button">受取済</a>
+                </div>
+            </div>
+            {% endif %}
+            {% else %}
+            {% if lending.state == 0 %}
+            <div class="d-flex justify-content-between mb-3" style="background-color: #FFB5A7;">
+                <div class="p-2">
+                    <h6>{{ lending.lender.room_number}} {{ lending.lender.user_name }}</h6>
+                </div>
+                <div class="p-2">
+                    <button class="btn btn-danger btn-sm">リクエスト待ち</a>
+                </div>
+            </div>
+            {% elif lending.state == 1 %}
+            <div class="d-flex justify-content-between mb-3" style="background-color: #FFD166;">
+                <div class="p-2">
+                    <h6>{{ lending.lender.room_number}} {{ lending.lender.user_name }}</h6>
+                </div>
+                <div class="p-2">
+                    <a class="btn btn-warning btn-sm" href="{% url 'change_state' lending.id %}" role="button">貸出済み</a>
+                </div>
+            </div>
+            {% elif lending.state == 2 %}
+            <div class="d-flex justify-content-between mb-3" style="background-color: #8ECAE6;">
+                <div class="p-2">
+                    <h6>{{ lending.lender.room_number}} {{ lending.lender.user_name }}</h6>
+                </div>
+                <div class="p-2">
+                    <a class="btn btn-info btn-sm" href="{% url 'change_state' lending.id %}" role="button">返却済</a>
+                </div>
+            </div>
+            {% endif %}
+            {% endif %}
+            {% endif %}
+            {% endif %}
+
             {% empty %}
+            {% if user == item.user %}
             <h4>要請者なし</h4>
-            {% endfor %}
+            {% else %}
+            {% if item.category == 0 %}
+            <h4>貸出リクエストを送っていません</h4>
+            {% elif item.category == 1 %}
+            <h4>受取リクエストを送っていません</h4>
+            {% else %}
+            <h4>立候補していません</h4>
             {% endif %}
+            {% endif %}
+            {% endfor %}
         </div>
 
         <div class="col-md-6">

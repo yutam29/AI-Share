@@ -29,8 +29,6 @@ def room(request, room_id):
         context = {
         'room_name_json': mark_safe(json.dumps(room_id)),
         'room' : room,
-        'user_name_json' : mark_safe(json.dumps(user.user_name)),
-        'user_room_json' : mark_safe(json.dumps(user.room_number)),
         'user' : user,
         'form' : form,
         'chats' : chats,

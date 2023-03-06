@@ -98,14 +98,30 @@ def deliver_register(request, item_id):
 @login_required
 def change_state(request, list_id):
     lending = Lending.objects.get(pk=list_id)
+    item_id = lending.item.id
     lending.state += 1
     lending.save()
-    return redirect('detail', item_id = lending.item.id)
+    if lending.item.category == 0:
+        if lending.state > 2:
+            lending.delete()
+            return redirect('detail', item_id = item_id)
+    elif lending.item.category == 1:
+        if lending.state > 2:
+            lending.delete()
+            return redirect('detail', item_id = item_id)
+    else:
+        if lending.state > 2:
+            lending.delete()
+            return redirect('detail', item_id = item_id)
+    return redirect('detail', item_id = item_id)
+    
 
 #削除
 @login_required
-def item_deleted(request):
-    return 0
+def item_deleted(request, item_id):
+    item = Item.objects.get(pk = item_id)
+    item.delete()
+    return redirect('index')
 
 
 

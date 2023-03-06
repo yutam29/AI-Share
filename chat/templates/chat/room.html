@@ -55,13 +55,13 @@
 <script>
     const message_list = document.getElementById( "list_message" );
     var roomName = {{ room_name_json }};
-    var userName = {{ user_name_json }};
-    var userRoomNum = {{ user_room_json }}
     var chatSocket = new WebSocket(
         'ws://' + window.location.host + '/ws/chat/' + String(roomName) + '/');
     chatSocket.onmessage = function(e) {
         var data = JSON.parse(e.data);
         var message = data['message'];
+        var userName = data['user_name'];
+        var userRoomNum = data['user_room_num'];
         var element_Li = document.createElement("li");
         element_Li.style.listStyle = "none";
         element_Li.classList.add("ps-2")
