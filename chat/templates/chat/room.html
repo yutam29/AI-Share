@@ -1,0 +1,90 @@
+{% extends 'app1/base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% block header %}メッセージ{% endblock header %}
+{% block css %}
+<!--Local CSS-->
+{% endblock css %}
+{% block title %} AI-Share {% endblock title %}
+{% block content %}
+
+<div class="container mt-4">
+    {% if room.user1 == user %}
+    <div class="name">
+        <h2>{{ room.user2.room_number }} {{ room.user2.user_name }}さんとのチャットルーム</h2>
+    </div>
+    {% else %}
+    <div class="name">
+        <h2>{{ room.user1.room_number }} {{ room.user1.user_name }}さんとのチャットルーム</h2>
+    </div>
+    {% endif %}
+    <hr></hr>
+
+    <div class="chat">
+        <ul class="ps-0" id="list_message">
+            {% for chat in chats %}
+            <li class="ps-2" style="list-style : none;">
+                <h5> {{ chat.sender.room_number }} {{ chat.sender.user_name }}</h5>
+                <p>{{ chat.text }}</p>
+            </li>
+            <hr>
+            {% empty %}
+            <h4>初めてのチャットです。</h4>
+            {% endfor %}
+        </ul>
+    </div>
+
+    {% if user.id %}
+    <div class="form">
+        <form method="POST" action="">
+            {% csrf_token %}
+            <div class="mb-3">
+                {% render_field form.text class="form-control" id="chat-message-input" %}
+            </div>
+            <input class="btn btn-primary btn-sm" id="chat-message-submit" type="button" value="送信">
+        </form>
+    </div>
+    {% else %}
+    <div class="message">
+        <h2>ログインしてね</h2>
+    </div>
+    {% endif %}
+    
+</div>
+
+<script>
+    const message_list = document.getElementById( "list_message" );
+    var roomName = {{ room_name_json }};
+    var userName = {{ user_name_json }};
+    var userRoomNum = {{ user_room_json }}
+    var chatSocket = new WebSocket(
+        'ws://' + window.location.host + '/ws/chat/' + String(roomName) + '/');
+    chatSocket.onmessage = function(e) {
+        var data = JSON.parse(e.data);
+        var message = data['message'];
+        var element_Li = document.createElement("li");
+        element_Li.style.listStyle = "none";
+        element_Li.classList.add("ps-2")
+        element_Li.innerHTML = '<h5>' + userRoomNum + ' ' + userName + '</h5>' + message + '<hr>';
+        message_list.append(element_Li);
+    };
+    chatSocket.onclose = function(e) {
+        console.error('Chat socket closed unexpectedly');
+    };
+    document.querySelector('#chat-message-input').focus();
+    document.querySelector('#chat-message-input').onkeyup = function(e) {
+        if (e.keyCode === 13) {  // enter, return
+            document.querySelector('#chat-message-submit').click();
+        }
+    };
+    document.querySelector('#chat-message-submit').onclick = function(e) {
+        var messageInputDom = document.querySelector('#chat-message-input');
+        var message = messageInputDom.value;
+        if (message != "") {
+            chatSocket.send(JSON.stringify({'message': message, 'user': {{ user.id }}, 'room': {{ room.id }}}));
+            messageInputDom.value = '';
+        }
+        
+    };
+</script>
+{% endblock content %}

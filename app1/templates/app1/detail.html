@@ -15,62 +15,170 @@
 {% endblock css %}
 {% block title %} {{ item.item_name }} {% endblock title %}
 {% block content %}
-<div class="container">
+<div class="container mt-5">
     {% if item.category == 0 %}
-    <div class="detail mb-3" style="background-color: #99D98C;">
-        <!--イメージ-->
-        <h3 class="ps-2 pt-2">{{ item.item_name }}</h3>
-        <h5 class="ps-2">{{ item.user.room_number }} {{ item.user.user_name }}</h5>
-        <p class="ps-2">{{ item.description }} <small>{{ item.posted_at }}</small></p>
-    <div class="apply pb-2 ps-2"><button class="btn btn-success btn-sm" type="submit">貸してもらう</button></div>
+    <div class="row">
+        <div class="col detail mt-5" style="background-color: #99D98C; width: 50%; height: 70%;">
+            <h3 class="ps-2 pt-3">{{ item.item_name }}</h3>
+            <h5 class="ps-2">{{ item.user.room_number }} {{ item.user.user_name }}</h5>
+            <p class="ps-2">{{ item.description }} <small>{{ item.posted_at }}</small></p>
+            <div class="apply pb-3 ps-2"><a class="btn btn-success btn-sm" href="{% url 'deliver' item.id %}"
+                    role="button">貸してもらう</a></div>
+        </div>
+        {% if item.image %}
+        <div class="col text-center">
+            <img src='{{ item.image.url }}' class="pe-2" style="width:80%; height:100%;">
+        </div>
+        {% else %}
+        <div class="col text-center">
+            <img src='/media/yusuke.jpeg' class="pe-2" style="width:300px; height:300px;">
+        </div>
+        {% endif %}
     </div>
     {% elif item.category == 1 %}
-    <div class="detail mb-3" style="background-color: #BDE0FE">
-        <!--イメージ-->
-        <h3 class="ps-2 pt-2">{{ item.item_name }}</h3>
-        <h5 class="ps-2">{{ item.user.room_number }} {{ item.user.user_name }}</h5>
-        <p class="ps-2">{{ item.description }} <small>{{ item.posted_at }}</small></p>
-    <div class="apply pb-2 ps-2"><button class="btn btn-primary btn-sm" type="submit">もらう</button></div>
+    <div class="row">
+        <div class="col detail mt-5" style="background-color: #BDE0FE; width: 50%; height: 70%;">
+            <h3 class="ps-2 pt-3">{{ item.item_name }}</h3>
+            <h5 class="ps-2">{{ item.user.room_number }} {{ item.user.user_name }}</h5>
+            <p class="ps-2">{{ item.description }} <small>{{ item.posted_at }}</small></p>
+            <div class="apply pb-3 ps-2"><a class="btn btn-primary btn-sm" href="{% url 'deliver' item.id %}"
+                    role="button">もらう</a></div>
+        </div>
+        {% if item.image %}
+        <div class="col text-center">
+            <img src='{{ item.image.url }}' class="pe-2" style="width:300px; height:300px;">
+        </div>
+        {% else %}
+        <div class="col text-center">
+            <img src='/media/yusuke.jpeg' class="pe-2" style="width:300px; height:300px;">
+        </div>
+        {% endif %}
     </div>
     {% else %}
-    <div class="detail mb-3" style="background-color: #FF4D6D">
-        <!--イメージ-->
-        <h3 class="ps-2 pt-2">{{ item.item_name }}</h3>
-        <h5 class="ps-2">{{ item.user.room_number }} {{ item.user.user_name }}</h5>
-        <p class="ps-2">{{ item.description }} <small>{{ item.posted_at }}</small></p>
-    <div class="apply pb-2 ps-2"><button class="btn btn-danger btn-sm" type="submit">貸してあげる</button></div>
+    <div class="row">
+        <div class="col detail mt-5" style="background-color: #FFB5A7; width: 50%; height: 70%;">
+            <h3 class="ps-2 pt-3">{{ item.item_name }}</h3>
+            <h5 class="ps-2">{{ item.user.room_number }} {{ item.user.user_name }}</h5>
+            <p class="ps-2">{{ item.description }} <small>{{ item.posted_at }}</small></p>
+            <div class="apply pb-3 ps-2"><a class="btn btn-danger btn-sm" href="{% url 'deliver' item.id %}"
+                    role="button">貸してあげる</a></div>
+        </div>
+        {% if item.image %}
+        <div class="col text-center">
+            <img src='{{ item.image.url }}' class="pe-2" style="width:300px; height:300px;" />
+        </div>
+        {% else %}
+        <div class="col text-center">
+            <img src='/media/yusuke.jpeg' class="pe-2" style="width:300px; height:300px;">
+        </div>
+        {% endif %}
     </div>
     {% endif %}
-    
-    <div class="comment">
-        <div class="row g-1">
-            <div class="col-auto">
-                <h4>コメント</h4>
+
+    <hr>
+
+    <div class="row">
+        <div class="col-md-6">
+            {% if user == item.user %}
+            {% if item.category == 0 %}
+            <h4>貸してほしい人</h4>
+            {% elif item.category == 1 %}
+            <h4>欲しい人</h4>
+            {% else %}
+            <h4>貸してくれる人</h4>
+            {% endif %}
+
+            {% for lending in lendings %}
+            {% if lending.item.category == 0 %}
+            {% if lending.state == 0 %}
+            <div class="d-flex justify-content-between mb-3" style="background-color: #99D98C;">
+                <div class="p-2">
+                    <h6>{{ lending.lender.room_number}} {{ lending.lender.user_name }}</h6>
+                </div>
+                <div class="p-2">
+                    <a class="btn btn-success btn-sm" href="{% url 'change_state' lending.id %}" role="button">貸出す</a>
+                </div>
             </div>
-            <div class="col-auto">
-                <form enctype="multipart/form-data" method="POST" action="">
-                    {% csrf_token %}
-                    <div class="form_element">
-                        {{form.detail}}
-                    </div>
-                    <input type="hidden" name="user" value='{{ user.id }}'>
-                    <input type="hidden" name="item" value='{{ item.id }}'>
-                    <input class="btn btn-primary btn-sm" type="submit" value="送信">
-                </form>
+            {% elif lending.state == 1 %}
+            <div class="d-flex justify-content-between mb-3" style="background-color: #FFD166;">
+                <div class="p-2">
+                    <h6>{{ lending.lender.room_number}} {{ lending.lender.user_name }}</h6>
+                </div>
+                <div class="p-2">
+                    <a class="btn btn-warning btn-sm" href="{% url 'change_state' lending.id %}" role="button">貸出済</a>
+                </div>
             </div>
+            {% endif %}
+            {% elif lending.item.category == 1 %}
+            {% if lending.state == 0 %}
+            <div class="d-flex justify-content-between mb-3" style="background-color: #BDE0FE;">
+                <div class="p-2">
+                    <h6>{{ lending.lender.room_number}} {{ lending.lender.user_name }}</h6>
+                </div>
+                <div class="p-2">
+                    <a class="btn btn-primary btn-sm" href="{% url 'change_state' lending.id %}" role="button">譲渡する</a>
+                </div>
+            </div>
+            {% elif lending.state == 1 %}
+            <div class="d-flex justify-content-between mb-3" style="background-color: #FFD166;">
+                <div class="p-2">
+                    <h6>{{ lending.lender.room_number}} {{ lending.lender.user_name }}</h6>
+                </div>
+                <div class="p-2">
+                    <a class="btn btn-warning btn-sm" href="{% url 'change_state' lending.id %}" role="button">譲渡済</a>
+                </div>
+            </div>
+            {% endif %}
+            {% else %}
+            {% if lending.state == 0 %}
+            <div class="d-flex justify-content-between mb-3" style="background-color: #FFB5A7;">
+                <div class="p-2">
+                    <h6>{{ lending.lender.room_number}} {{ lending.lender.user_name }}</h6>
+                </div>
+                <div class="p-2">
+                    <a class="btn btn-danger btn-sm" href="{% url 'change_state' lending.id %}" role="button">貸してもらう</a>
+                </div>
+            </div>
+            {% elif lending.state == 1 %}
+            <div class="d-flex justify-content-between mb-3" style="background-color: #FFD166;">
+                <div class="p-2">
+                    <h6>{{ lending.lender.room_number}} {{ lending.lender.user_name }}</h6>
+                </div>
+                <div class="p-2">
+                    <a class="btn btn-warning btn-sm" href="{% url 'change_state' lending.id %}" role="button">受取済</a>
+                </div>
+            </div>
+            {% endif %}
+            {% endif %}
+            {% empty %}
+            <h4>要請者なし</h4>
+            {% endfor %}
+            {% endif %}
+        </div>
+
+        <div class="col-md-6">
+            <h4>コメント</h4>
+            <form enctype="multipart/form-data" method="POST" action="">
+                {% csrf_token %}
+                <div class="form_element">
+                    {{form.detail}}
+                </div>
+                <input type="hidden" name="user" value='{{ user.id }}'>
+                <input type="hidden" name="item" value='{{ item.id }}'>
+                <input class="btn btn-primary btn-sm" type="submit" value="送信">
+            </form>
+            <hr>
+            {% for comment in comments %}
+            <div class="comment_list">
+                <h6>{{ comment.user.room_number }} {{ comment.user.user_name }}</h6>
+                <p>{{ comment.detail }}</p>
+                <small>{{ comment.cmt_posted_at }}</small>
+                <hr>
+            </div>
+            {% empty %}
+            <h4>コメントはありません</h4>
+            {% endfor %}
         </div>
     </div>
-    <hr>
-    {% for comment in comments %}
-    <div class="comment_list">
-        <h6>{{ comment.user.room_number }} {{ comment.user.user_name }}</h6>
-        <p>{{ comment.detail }}</p>
-        <small>{{ comment.cmt_posted_at }}</small>
-        <hr>
-    </div>
-    {% empty %}
-    <h4>コメントはありません</h4>
-    {% endfor %}
-</div>
 </div>
 {% endblock content %}

@@ -7,7 +7,7 @@
 {% endblock css %}
 {% block title %} AI-Share {% endblock title %}
 {% block content %}
-<div class="container">
+<div class="container mt-5">
     {% if user.id %}
     <div class="form">
         <form enctype="multipart/form-data" method="POST" action="">
@@ -24,6 +24,9 @@
                     <option value=1>譲渡</option>
                     <option value=2>リクエスト</option>
                 </select>
+                <div class="error ps-2" style="color: #ff0000;">
+                    <p>{{ message }}</p>
+                </div>
             </div>
             <div class="mb-3">
                 <label for="description">詳細</label>

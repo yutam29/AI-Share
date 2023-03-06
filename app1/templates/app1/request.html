@@ -6,14 +6,14 @@
 {% endblock css %}
 {% block title %} リクエスト {% endblock title %}
 {% block content %}
-<div class="container">
+<div class="container mt-5">
     <div class="row">
         {% for item in items %}
         <div class="col-md-4 mb-3">
             <a class="card border-0" href="{% url 'detail' item.id %}" id="request">
                 <div class="card-body">
-                    <h5 class="card-title">リクエスト</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">{{ item.item_name }}</h6>
+                    <h5 class="card-title">{{ item.item_name }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">リクエスト</h6>
                     <p class="card-text">{{ item.user.room_number }} {{ item.user.user_name }}</p>
                     <div class="date"><small>{{ item.posted_at }}</small></div>
                 </div>

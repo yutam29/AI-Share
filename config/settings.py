@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'social_django',
     'app1',
     'accounts',
+    'chat',
+    'channels',
 ]
 
 MIDDLEWARE = [
@@ -140,6 +142,17 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+#channels
+ASGI_APPLICATION = 'config.asgi.application'
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}
 
 #Google Social Oauth key
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '519221857535-oq8ik03ovp918baoml9nun9g6ik0tqat.apps.googleusercontent.com'  # クライアントID

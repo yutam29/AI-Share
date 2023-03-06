@@ -6,15 +6,15 @@
 {% endblock css %}
 {% block title %} 貸すか、あげるか {% endblock title %}
 {% block content %}
-<div class="container">
+<div class="container mt-5">
     <div class="row">
         {% for item in items %}
         {% if item.category == 0 %}
         <div class="col-md-4 mb-3">
             <a class="card border-0" href="{% url 'detail' item.id %}" id="lend">
                 <div class="card-body">
-                    <h5 class="card-title">貸出</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">{{ item.item_name }}</h6>
+                    <h5 class="card-title">{{ item.item_name }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">貸出</h6>
                     <p class="card-text">{{ item.user.room_number }} {{ item.user.user_name }}</p>
                     <div class="date"><small>{{ item.posted_at }}</small></div>
                 </div>
@@ -24,8 +24,8 @@
         <div class="col-md-4 mb-3">
             <a class="card border-0" href="{% url 'detail' item.id %}" id="giving">
                 <div class="card-body">
-                    <h5 class="card-title">譲渡</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">{{ item.item_name }}</h6>
+                    <h5 class="card-title">{{ item.item_name }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">譲渡</h6>
                     <p class="card-text">{{ item.user.room_number }} {{ item.user.user_name }}</p>
                     <div class="date"><small>{{ item.posted_at }}</small></div>
                 </div>

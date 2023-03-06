@@ -1,0 +1,27 @@
+{% extends 'app1/base.html' %}
+{% load static %}
+{% block header %}メッセージ{% endblock header %}
+{% block css %}
+<!--Local CSS-->
+{% endblock css %}
+{% block title %} AI-Share {% endblock title %}
+{% block content %}
+<div class="container mt-4">
+    <div class="mb-2">
+        <h2>リスト</h2>
+    </div>
+    <hr>
+    {% for room in rooms %}
+    <div class="col-md-4 mb-3">
+        {% if room.user1 == user %}
+        <a href="{% url 'room' room.id %}">{{ room.user2.room_number }} {{ room.user2.user_name }}</a>
+        {% else %}
+        <a href="{% url 'room' room.id %}">{{ room.user2.room_number }} {{ room.user1.user_name }}</a>
+        {% endif %}
+    </div>
+    <hr>
+    {% empty %}
+    <h3>やりとりはありません</h3>
+    {% endfor %}
+</div>
+{% endblock content %}
