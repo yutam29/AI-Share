@@ -1,0 +1,31 @@
+{% extends 'app1/base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% block header %}ログイン{% endblock header %}
+{% block css %}
+<!--Local CSS-->
+{% endblock css %}
+{% block title %} AI-Share {% endblock title %}
+{% block content %}
+    <div class="container mt-5">
+        {{ message }}
+        <div class="form">
+            <form enctype="multipart/form-data" method="POST" action="">
+                {% csrf_token %}
+                <div class="form_element mb-3">
+                    <label for="description">部屋番号</label>
+                    {% render_field form.username class="form-control" placeholder="Room Number"%}
+                </div>
+                <div class="form_element mb-3">
+                    <label for="description">パスワード</label>
+                    {% render_field form.password class="form-control" placeholder="Password"%}
+                </div>
+                <input class="btn btn-primary btn-sm" type="submit" value="ログイン">
+            </form>
+        </div>
+        <hr>
+        <div class="message">
+            <h2><a class="nav-link" href="{% url 'social:begin' 'google-oauth2' %}" style="color: #0077b6;">Googleでログイン</a></h2>
+        </div>
+    </div>
+    {% endblock content %}

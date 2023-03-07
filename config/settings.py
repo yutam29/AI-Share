@@ -154,6 +154,10 @@ CHANNEL_LAYERS = {
     },
 }
 
+#認証
+LOGIN_URL = 'signin'
+LOGIN_REDIRECT_URL = 'index'
+
 #Google Social Oauth key
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '519221857535-oq8ik03ovp918baoml9nun9g6ik0tqat.apps.googleusercontent.com'  # クライアントID
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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' # クライアント シークレット
