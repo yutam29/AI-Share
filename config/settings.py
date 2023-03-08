@@ -12,19 +12,23 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import os
+import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+#envからの読み込み
+env = environ.Env()
+env.read_env(os.path.join(BASE_DIR, '.env'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-76b)xyz=4^ot)p0^w-y6-bp%9%9d+9d2p*c)ow$%jp)bhq@5#f'
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = []
 
@@ -159,7 +163,7 @@ LOGIN_URL = 'signin'
 LOGIN_REDIRECT_URL = 'index'
 
 #Google Social Oauth key
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '519221857535-oq8ik03ovp918baoml9nun9g6ik0tqat.apps.googleusercontent.com'  # クライアントID
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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' # クライアント シークレット
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = env('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY')
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = env('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET')
 
 
