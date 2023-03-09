@@ -61,16 +61,16 @@
                             <a class="nav-link" href="{% url 'index' %}">ホーム</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'social:begin' 'google-oauth2' %}">貸出/譲渡</a>
+                            <a class="nav-link" href="{% url 'signin' %}">貸出/譲渡</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'social:begin' 'google-oauth2' %}">リクエスト</a>
+                            <a class="nav-link" href="{% url 'signin' %}">リクエスト</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'social:begin' 'google-oauth2' %}">投稿</a>
+                            <a class="nav-link" href="{% url 'signin' %}">投稿</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'social:begin' 'google-oauth2' %}">メッセージ</a>
+                            <a class="nav-link" href="{% url 'signin' %}">メッセージ</a>
                         </li>
                     </ul>
                     <ul class="navbar-nav mb-2 mb-lg-0">
@@ -78,7 +78,7 @@
                             <a class="nav-link" href="{% url 'register' %}">新規作成</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'social:begin' 'google-oauth2' %}">ログイン</a>
+                            <a class="nav-link" href="{% url 'signin' %}">ログイン</a>
                         </li>
                     </ul>
                     {% endif %}
