@@ -144,7 +144,7 @@ AUTHENTICATION_BACKENDS = (
 STATIC_URL = '/usr/share/nginx/html/static'
 STATICFILES_DIRS = (
     [
-        os.path.join(BASE_DIR, "/app1/static"), 
+        os.path.join(BASE_DIR, 'static'), 
     ]
 )
 
